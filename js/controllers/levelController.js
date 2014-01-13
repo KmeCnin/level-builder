@@ -14,12 +14,18 @@ levelBuilder.controller('levelController', function ($scope) {
     $scope.uploadedFile = null;
     $scope.xml = null;
     $scope.offset = {'x': 42, 'y': 151};
+    $scope.isSelected = false;
     $scope.setCreateType = function(type) {
         $scope.createType = type;
         $scope.drawing = false;
-        $('.selected.texture').attr('class', 'texture');
-        $('#svg .selected.poly').attr('class', 'poly');
-        $('#svg .selected').attr('class', '');
+        if (type !== 'infos') {
+            $('.selected.texture').attr('class', 'texture');
+            $('#svg .selected.poly').attr('class', 'poly');
+            $('#svg .selected').attr('class', '');
+            $scope.isSelected = false;
+        } else {
+            $('#modalInfo'+$scope.isSelected).modal();
+        }
     };
     $scope.setMouseCoord = function(event) {
         $scope.mouseCoord.x = event.clientX - $scope.offset.x;
@@ -35,6 +41,7 @@ levelBuilder.controller('levelController', function ($scope) {
                 $scope.startMove.x = $scope.mouseCoord.x;
                 $scope.startMove.y = $scope.mouseCoord.y;
                 $scope.drawing = true;
+                $scope.isSelected = $('.selected').attr('id');
                 break;
             case 'origin':
                 $scope.origin.cx = $scope.mouseCoord.x;
@@ -45,7 +52,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     'id': $scope.elements.length,
                     'type': 'rect',
                     'x': $scope.mouseCoord.x,
-                    'y': $scope.mouseCoord.y
+                    'y': $scope.mouseCoord.y,
+                    'shape': 'box',
+                    'name' : ''
                 };
                 $scope.elements.push(element);
                 $scope.drawing = true;
@@ -55,7 +64,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     'id': $scope.elements.length,
                     'type': 'circle',
                     'x': $scope.mouseCoord.x,
-                    'y': $scope.mouseCoord.y
+                    'y': $scope.mouseCoord.y,
+                    'shape': 'circle',
+                    'name' : ''
                 };
                 $scope.elements.push(element);
                 $scope.drawing = true;
@@ -65,7 +76,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     var element = {
                         'id': $scope.elements.length,
                         'type': 'path',
-                        'd': 'M '+$scope.mouseCoord.x+','+$scope.mouseCoord.y+' '
+                        'd': 'M '+$scope.mouseCoord.x+','+$scope.mouseCoord.y+' ',
+                        'shape': 'chain',
+                        'name' : ''
                     };
                     $scope.elements.push(element);
                     $scope.drawing = true;
@@ -80,7 +93,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     var element = {
                         'id': $scope.elements.length,
                         'type': 'poly',
-                        'd': 'M '+$scope.mouseCoord.x+','+$scope.mouseCoord.y+' '
+                        'd': 'M '+$scope.mouseCoord.x+','+$scope.mouseCoord.y+' ',
+                        'shape': 'polygon',
+                        'name' : ''
                     };
                     $scope.elements.push(element);
                     $scope.drawing = true;
@@ -117,12 +132,12 @@ levelBuilder.controller('levelController', function ($scope) {
                 $scope.startMove.y = $scope.mouseCoord.y;
             } else if($scope.createType === 'select2') {
                 if ($('.selected').is('rect')) {
-                    $('.selected').attr('x', parseInt($('.selected').attr('x')) + ($scope.mouseCoord.x - $scope.startMove.x));
-                    $('.selected').attr('y', parseInt($('.selected').attr('y')) + ($scope.mouseCoord.y - $scope.startMove.y));
+                    $scope.elements[$('.selected').attr('id')].x = parseInt($('.selected').attr('x')) + ($scope.mouseCoord.x - $scope.startMove.x);
+                    $scope.elements[$('.selected').attr('id')].y = parseInt($('.selected').attr('y')) + ($scope.mouseCoord.y - $scope.startMove.y);
                 }
                 else if ($('.selected').is('circle')) {
-                    $('.selected').attr('cx', parseInt($('.selected').attr('cx')) + ($scope.mouseCoord.x - $scope.startMove.x));
-                    $('.selected').attr('cy', parseInt($('.selected').attr('cy')) + ($scope.mouseCoord.y - $scope.startMove.y));
+                    $scope.elements[$('.selected').attr('id')].x = parseInt($('.selected').attr('cx')) + ($scope.mouseCoord.x - $scope.startMove.x);
+                    $scope.elements[$('.selected').attr('id')].y = parseInt($('.selected').attr('cy')) + ($scope.mouseCoord.y - $scope.startMove.y);
                 }
                 else if ($('.selected').is('path')) {
                     var d = $('.selected').attr("d");
@@ -135,7 +150,7 @@ levelBuilder.controller('levelController', function ($scope) {
                             coords[i] = x +','+ y;
                         }
                     }
-                    $('#svg .selected').attr('d', coords.join(' '));
+                    $scope.elements[$('.selected').attr('id')].d = coords.join(' ');
                 }
                 $scope.startMove.x = $scope.mouseCoord.x;
                 $scope.startMove.y = $scope.mouseCoord.y;
@@ -144,6 +159,7 @@ levelBuilder.controller('levelController', function ($scope) {
     };
     $scope.actionEnd = function() {
         if ($scope.drawing) {
+            $scope.generateXML();
             if ($scope.createType !== 'path' && $scope.createType !== 'poly')
                 $scope.drawing = false;
             else if ($scope.createType === 'select1' || $scope.createType === 'select2') {
@@ -153,6 +169,7 @@ levelBuilder.controller('levelController', function ($scope) {
     };
     $scope.actionEndPath = function() {
         if ($scope.drawing) {
+            $scope.generateXML();
             if ($scope.createType === 'poly') {
                 var currentElement = new Object;
                 currentElement = $scope.elements[Object.keys($scope.elements)[Object.keys($scope.elements).length - 1]];
