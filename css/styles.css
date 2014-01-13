@@ -1,0 +1,119 @@
+body {
+    background-image : url(../img/bg-footer-noise.jpg);
+}
+.container {
+    margin : 15px;
+    width : auto;
+}
+.form-control {
+    width : auto;
+}
+textarea.form-control {
+    width : 100%;
+    height : 100%;
+    font-family : Monaco, Menlo, Consolas, "Courier New", monospace;
+    resize : vertical;
+}
+#canvas {
+    width : 100%;
+    height :500px;
+}
+div.well {
+    margin-bottom : 15px;
+    padding : 10px;
+    background-color : #151515;
+    box-shadow : 0 0 10px black inset, 0 0 300px rgba(0,0,0,0.5) inset;
+    background-image : url(../img/bg-footer-noise.jpg);
+}
+div.well.spliter {
+    box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    width : 29%;
+    height : 800px;
+    display : inline-block;
+    float : left;
+}
+div.well.main {
+    box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    width : 100%;
+    height : 800px;
+    display : inline-block;
+}
+div#whitesheet {
+    padding-top : 50px;
+    position : relative;
+    top : -52px;
+    z-index : 10;
+    background-color: white;
+    height : 100%;
+    border-radius : 6px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    overflow : hidden;
+}
+div#btnwrapper {
+    position : relative;
+    z-index : 50;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    width : 100%;
+    margin : 0;
+}
+path {
+    fill: none;
+    stroke : rgba(255, 0, 0, 0.5);
+    stroke-width : 1px;
+    stroke-linecap : round;
+}
+rect, circle {
+    fill : rgba(255, 0, 0, 0.2);
+    stroke : rgba(255, 0, 0, 0.5);
+    stroke-width : 1px;
+}
+path.poly {
+    fill : rgba(255, 0, 0, 0.2);
+    stroke : rgba(255, 0, 0, 0.5);
+}
+.coord {
+    float : right;
+    font-size : 12px;
+}
+.origin {
+    fill : rgba(0, 0, 255, 0.2);
+    stroke : rgba(0, 0, 255, 0.5);
+}
+body.dragOver #file-drop{display:block;} /* During drag */
+body #file-drop{z-index:1000;position:fixed;top:0;left:0;width:100%;height:100%;display:none;} /* No drag */
+img.texture {
+    position : absolute;
+    left : 4px;
+    top : 55px;
+    z-index : 200;
+}
+#svg {
+    position : relative;
+    z-index : 300;
+}
+#svg.background {
+    z-index : -300;
+}
+#whitesheet img {
+    border : 1px solid transparent;
+}
+#whitesheet img.selected {
+    border : 1.5px solid rgba(0, 255, 0, 1);
+    opacity : 0.5;
+}
+rect.selected, circle.selected {
+    fill : rgba(0, 255, 0, 0.2);
+    stroke : rgba(0, 255, 0, 0.5);
+}
+path.selected {
+    fill: none;
+    stroke : rgba(0, 255, 0, 0.5);
+}
+path.poly.selected {
+    fill : rgba(0, 255, 0, 0.2);
+    stroke : rgba(0, 255, 0, 0.5);
+}
