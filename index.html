@@ -39,7 +39,7 @@
                         <li ng-class="{active: createType=='circle'}" ng-click="setCreateType('circle')"><a href="">Cercle</a></li>
                         <li ng-class="{active: createType=='poly'}" ng-click="setCreateType('poly')"><a href="">Polygone</a></li>
                         <li ng-class="{active: createType=='path'}" ng-click="setCreateType('path')"><a href="">Chemin</a></li>
-                        <li ng-if="isSelected!=false" ng-class="{active: createType=='infos'}" ng-click="setCreateType('infos')"><a href="">Propriétés</a></li>
+                        <li ng-if="isSelected!==false" ng-click="showProperties()"><a href="">Propriétés</a></li>
                     </ul>
                     <a class="navbar-brand coord" href="">x : {{planCoord.x}} | y : {{planCoord.y}}</a>
                 </div>
@@ -52,28 +52,71 @@
                         <circle ng:attr:id="{{e.id}}" ng-click="setSelected($event)" ng-if="e.type=='circle'" ng:attr:cx="{{e.x}}" ng:attr:cy="{{e.y}}" ng:attr:r="{{e.r}}" />
                         <path ng:attr:id="{{e.id}}" class="poly" ng-click="setSelected($event)" ng-if="e.type=='poly'" ng:attr:d="{{e.d}}" />
                         <path ng:attr:id="{{e.id}}" ng-click="setSelected($event)" ng-if="e.type=='path'" ng:attr:d="{{e.d}}" />
-                        <!-- Modale -->
-                        <div class="modal fade" ng:attr:id="modalInfo{{e.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Propriétés de l'élément {{e.name}}</h4>
-                                    </div>
-                                    <div class="modal-body">
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                                    </div>
-                                </div><!-- /.modal-content -->
-                            </div><!-- /.modal-dialog -->
-                        </div><!-- /.modal -->
                     </g>
                 </svg>
                 <img ng-repeat="t in textures" class="texture" ng-click="setSelected($event)" ng:attr:src="{{t.src}}">
             </div>
         </div>
+        <!-- Modales -->
+        <div ng-repeat="e in elements" class="modal fade" ng:attr:id="modalInfo{{e.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button ng-click="generateXML()" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Propriétés de l'élément {{e.name}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <legend>Body</legend>
+                            <div class="form-group">
+                                <label for="name" class="control-label">Name</label>
+                                <input ng-model="e.name" type="text" class="form-control" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="body_type" class="control-label">Type</label>
+                                <select ng-model="e.body_type" class="form-control" id="body_type">
+                                    <option value="static">Statique</option>
+                                    <option value="dynamic">Dynamique</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="body_tag" class="control-label">Tag</label>
+                                <input ng-model="e.body_tag" type="text" class="form-control" id="body_tag">
+                            </div>
+                            <div class="form-group">
+                                <label for="body_bullet" class="control-label">Bullet</label>
+                                <select ng-model="e.body_bullet" class="form-control" id="body_bullet">
+                                    <option value="true">Oui</option>
+                                    <option value="false">Non</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="body_angular_damping" class="control-label nowrap">Angular damping</label>
+                                <input ng-model="e.body_angular_damping" type="text" class="number form-control" id="body_angular_damping">
+                            </div>
+                            <div class="form-group">
+                                <label for="body_linear_damping" class="control-label nowrap">Linear damping</label>
+                                <input ng-model="e.body_linear_damping" type="text" class="number form-control" id="body_linear_damping">
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Fixture</legend>
+                            <div class="form-group">
+                                <label for="fixture_density" class="control-label nowrap">Density</label>
+                                <input ng-model="e.fixture_density" type="text" class="number form-control" id="fixture_density">
+                            </div>
+                            <div class="form-group">
+                                <label for="fixture_restitution" class="control-label nowrap">Restitution</label>
+                                <input ng-model="e.fixture_restitution" type="text" class="number form-control" id="fixture_restitution">
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="generateXML()">Fermer</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         <div class="bsa well main">
             <textarea id="xml" class="form-control">
             </textarea>

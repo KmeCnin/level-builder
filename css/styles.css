@@ -117,3 +117,22 @@ path.poly.selected {
     fill : rgba(0, 255, 0, 0.2);
     stroke : rgba(0, 255, 0, 0.5);
 }
+.modal label {
+    line-height : 38px;
+}
+.nowrap {
+    white-space : nowrap;
+}
+.modal .form-control {
+    display : inline-block;
+    margin-left : 10px;
+}
+.modal input[type=number] {
+    width : 100px;
+}
+.modal input[type=text] {
+    width : 300px;
+}
+.modal input.number {
+    width : 100px;
+}

@@ -18,14 +18,13 @@ levelBuilder.controller('levelController', function ($scope) {
     $scope.setCreateType = function(type) {
         $scope.createType = type;
         $scope.drawing = false;
-        if (type !== 'infos') {
-            $('.selected.texture').attr('class', 'texture');
-            $('#svg .selected.poly').attr('class', 'poly');
-            $('#svg .selected').attr('class', '');
-            $scope.isSelected = false;
-        } else {
-            $('#modalInfo'+$scope.isSelected).modal();
-        }
+        $('.selected.texture').attr('class', 'texture');
+        $('#svg .selected.poly').attr('class', 'poly');
+        $('#svg .selected').attr('class', '');
+        $scope.isSelected = false;
+    };
+    $scope.showProperties = function() {
+        $('#modalInfo'+$('.selected').attr('id')).modal();
     };
     $scope.setMouseCoord = function(event) {
         $scope.mouseCoord.x = event.clientX - $scope.offset.x;
@@ -35,6 +34,16 @@ levelBuilder.controller('levelController', function ($scope) {
     };
     $scope.actionBegin = function() {
         // console.log($scope.elements);
+        var element = {
+            'name' : '',
+            'body_type' : 'static',
+            'body_tag' : '',
+            'body_bullet' : false,
+            'body_angular_damping' : '0.0',
+            'body_linear_damping' : '0.0',
+            'fixture_density' : '0.9',
+            'fixture_restitution' : '0.0'
+        };
         switch ($scope.createType) {
             case 'select1':
             case 'select2':
@@ -54,7 +63,14 @@ levelBuilder.controller('levelController', function ($scope) {
                     'x': $scope.mouseCoord.x,
                     'y': $scope.mouseCoord.y,
                     'shape': 'box',
-                    'name' : ''
+                    'name' : '',
+                    'body_type' : 'static',
+                    'body_tag' : '',
+                    'body_bullet' : false,
+                    'body_angular_damping' : '0.0',
+                    'body_linear_damping' : '0.0',
+                    'fixture_density' : '0.9',
+                    'fixture_restitution' : '0.0'
                 };
                 $scope.elements.push(element);
                 $scope.drawing = true;
@@ -66,7 +82,14 @@ levelBuilder.controller('levelController', function ($scope) {
                     'x': $scope.mouseCoord.x,
                     'y': $scope.mouseCoord.y,
                     'shape': 'circle',
-                    'name' : ''
+                    'name' : '',
+                    'body_type' : 'static',
+                    'body_tag' : '',
+                    'body_bullet' : false,
+                    'body_angular_damping' : '0.0',
+                    'body_linear_damping' : '0.0',
+                    'fixture_density' : '0.9',
+                    'fixture_restitution' : '0.0'
                 };
                 $scope.elements.push(element);
                 $scope.drawing = true;
@@ -78,7 +101,14 @@ levelBuilder.controller('levelController', function ($scope) {
                         'type': 'path',
                         'd': 'M '+$scope.mouseCoord.x+','+$scope.mouseCoord.y+' ',
                         'shape': 'chain',
-                        'name' : ''
+                        'name' : '',
+                        'body_type' : 'static',
+                        'body_tag' : '',
+                        'body_bullet' : false,
+                        'body_angular_damping' : '0.0',
+                        'body_linear_damping' : '0.0',
+                        'fixture_density' : '0.9',
+                        'fixture_restitution' : '0.0'
                     };
                     $scope.elements.push(element);
                     $scope.drawing = true;
@@ -95,7 +125,14 @@ levelBuilder.controller('levelController', function ($scope) {
                         'type': 'poly',
                         'd': 'M '+$scope.mouseCoord.x+','+$scope.mouseCoord.y+' ',
                         'shape': 'polygon',
-                        'name' : ''
+                        'name' : '',
+                        'body_type' : 'static',
+                        'body_tag' : '',
+                        'body_bullet' : false,
+                        'body_angular_damping' : '0.0',
+                        'body_linear_damping' : '0.0',
+                        'fixture_density' : '0.9',
+                        'fixture_restitution' : '0.0'
                     };
                     $scope.elements.push(element);
                     $scope.drawing = true;
@@ -215,9 +252,9 @@ levelBuilder.controller('levelController', function ($scope) {
                 for (var i = 0, c = $scope.elements.length; i < c; i++) {
                     var e = $scope.elements[i];
                     $scope.xml += '\n\t\t\t<object name="'+e.name+'">';
-                        $scope.xml += '\n\t\t\t\t<body type="'+e.behaviour+'" x="'+(e.x - $scope.origin.cx)+'" y="'+(e.y - $scope.origin.cy)+'" tag="'+e.tag+'" bullet="'+e.isBullet+'" angle="'+e.angle+'" angular_damping="'+e.angular_damping+'" linear_damping="'+e.linear_damping+'" />';
+                        $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+(e.x - $scope.origin.cx)+'" y="'+(e.y - $scope.origin.cy)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
                         $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'" width="'+e.width+'" height="'+e.height+'" />';
-                        $scope.xml += '\n\t\t\t\t<fixture density="'+e.density+'" restitution="'+e.restitution+'" />';
+                        $scope.xml += '\n\t\t\t\t<fixture density="'+e.fixture_density+'" restitution="'+e.fixture_restitution+'" />';
                     $scope.xml += '\n\t\t\t</object>';
                 }
                 $scope.xml += '\n\t\t</worldObjects>';
