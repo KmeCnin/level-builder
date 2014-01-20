@@ -15,13 +15,17 @@ levelBuilder.controller('levelController', function ($scope) {
     $scope.xml = null;
     $scope.offset = {'x': 42, 'y': 151};
     $scope.isSelected = false;
+    $scope.showResize = false;
     $scope.setCreateType = function(type) {
         $scope.createType = type;
         $scope.drawing = false;
-        $('.selected.texture').attr('class', 'texture');
-        $('#svg .selected.poly').attr('class', 'poly');
-        $('#svg .selected').attr('class', '');
-        $scope.isSelected = false;
+        if (type !== 'resize') {
+            $('.selected.texture').attr('class', 'texture');
+            $('#svg .selected.poly').attr('class', 'poly');
+            $('#svg .selected').attr('class', '');
+            $scope.isSelected = false;
+            $scope.showResize = false;
+        }
     };
     $scope.showProperties = function() {
         $('#modalInfo'+$('.selected').attr('id')).modal();
@@ -50,11 +54,13 @@ levelBuilder.controller('levelController', function ($scope) {
                 $scope.startMove.x = $scope.mouseCoord.x;
                 $scope.startMove.y = $scope.mouseCoord.y;
                 $scope.drawing = true;
-                $scope.isSelected = $('.selected').attr('id');
                 break;
             case 'origin':
                 $scope.origin.cx = $scope.mouseCoord.x;
                 $scope.origin.cy = $scope.mouseCoord.y;
+                break;
+            case 'resize':
+                $scope.drawing = true;
                 break;
             case 'rect':
                 var element = {
@@ -162,7 +168,25 @@ levelBuilder.controller('levelController', function ($scope) {
                 default:
                     break;
             } 
-            if ($scope.createType === 'select1') {
+            if ($scope.createType === 'resize') {
+                var width = null;
+                var height = null;
+                if (typeof($('.selected').attr('id')) === 'undefined') { // Image
+                    var str1 = $('.selected').css('left');
+                    var str2 = $('.selected').css('top');
+                    width = Math.abs($scope.mouseCoord.x - str1.substring(0, str1.length - 2));
+                    height = Math.abs($scope.mouseCoord.y - str2.substring(0, str2.length - 2));
+                    $('.selected').attr('width', width);
+                    $('.selected').attr('height', height);
+                } else if ($scope.elements[$('.selected').attr('id')].type === 'rect') {
+                    width = Math.abs($scope.mouseCoord.x - $('.selected').attr('x'));
+                    height = Math.abs($scope.mouseCoord.y - $('.selected').attr('y'));
+                    $scope.elements[$('.selected').attr('id')].width = width;
+                    $scope.elements[$('.selected').attr('id')].height = height;
+                } else if ($scope.elements[$('.selected').attr('id')].type === 'circle') {
+                    $scope.elements[$('.selected').attr('id')].r = Math.sqrt(Math.pow($scope.elements[$('.selected').attr('id')].x - $scope.mouseCoord.x, 2) + Math.pow($scope.elements[$('.selected').attr('id')].y - $scope.mouseCoord.y, 2));
+                }
+            } else if ($scope.createType === 'select1') {
                 $('.selected').css('left', parseInt($('.selected').css('left')) + ($scope.mouseCoord.x - $scope.startMove.x));
                 $('.selected').css('top', parseInt($('.selected').css('top')) + ($scope.mouseCoord.y - $scope.startMove.y));
                 $scope.startMove.x = $scope.mouseCoord.x;
@@ -235,12 +259,19 @@ levelBuilder.controller('levelController', function ($scope) {
             elem.addClass('selected');
             $('#svg .selected.poly').attr('class', 'poly');
             $('#svg .selected').attr('class', '');
+            $scope.isSelected = true;
+            $scope.showResize = true;
         }
         if ($scope.createType === 'select2') {
             $('.selected.texture').attr('class', 'texture');
             $('#svg .selected.poly').attr('class', 'poly');
             $('#svg .selected').attr('class', '');
             elem.addClass('selected');
+            $scope.isSelected = $('.selected').attr('id');
+            if ($scope.elements[$('.selected').attr('id')].type !== 'poly' && $scope.elements[$('.selected').attr('id')].type !== 'path')
+                $scope.showResize = $('.selected').attr('id');
+            else
+                $scope.showResize = false;
         }
     };
     // Supprimer élément

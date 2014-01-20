@@ -11,6 +11,7 @@
         <!-- CSS -->
         <link rel="stylesheet" href="http://pierrechanel-gauthier.com/lib/bootstrap/css/themes/slate.css" type="text/plain">
         <link rel="stylesheet" href="css/styles.css" type="text/plain">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     </head>
     <body class="container" ng-controller="levelController">
         <div id="file-drop" imagedrop on-image-drop="imageDropped()"></div>
@@ -28,19 +29,20 @@
             <div class="navbar navbar-default" id="btnwrapper">
                 <div class="navbar-collapse collapse navbar-responsive-collapse" style="padding:0">
                     <ul class="nav navbar-nav">
-                        <li ng-class="{active: createType=='select1'||createType=='select2'}" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Sélection <b class="caret"></b></a>
+                        <li ng-class="{active: createType=='select1'||createType=='select2'}" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href=""><i class="fa fa-location-arrow"></i> Sélection <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li ng-class="{active: createType=='select1'}" ng-click="setCreateType('select1')"><a href="">Textures</a></li>
-                                <li ng-class="{active: createType=='select2'}" ng-click="setCreateType('select2')"><a href="">Éléments</a></li>
+                                <li ng-class="{active: createType=='select1'}" ng-click="setCreateType('select1')"><a href=""><i class="fa fa-picture-o"></i> Textures</a></li>
+                                <li ng-class="{active: createType=='select2'}" ng-click="setCreateType('select2')"><a href=""><i class="fa fa-star"></i> Éléments</a></li>
                             </ul>
                         </li>
-                        <li ng-class="{active: createType=='origin'}" ng-click="setCreateType('origin')"><a href="">Origine</a></li>
-                        <li ng-class="{active: createType=='rect'}" ng-click="setCreateType('rect')"><a href="">Rectangle</a></li>
-                        <li ng-class="{active: createType=='circle'}" ng-click="setCreateType('circle')"><a href="">Cercle</a></li>
-                        <li ng-class="{active: createType=='poly'}" ng-click="setCreateType('poly')"><a href="">Polygone</a></li>
-                        <li ng-class="{active: createType=='path'}" ng-click="setCreateType('path')"><a href="">Chemin</a></li>
-                        <li ng-if="isSelected!==false" ng-click="showProperties()"><a href="">Propriétés</a></li>
-                        <li ng-if="isSelected!==false" ng-click="delete()"><a href="">Supprimer</a></li>
+                        <li ng-class="{active: createType=='origin'}" ng-click="setCreateType('origin')"><a href=""><i class="fa fa-thumb-tack"></i> Origine</a></li>
+                        <li ng-class="{active: createType=='rect'}" ng-click="setCreateType('rect')"><a href=""><i class="fa fa-square"></i> Rectangle</a></li>
+                        <li ng-class="{active: createType=='circle'}" ng-click="setCreateType('circle')"><a href=""><i class="fa fa-circle"></i> Cercle</a></li>
+                        <li ng-class="{active: createType=='poly'}" ng-click="setCreateType('poly')"><a href=""><i class="fa fa-star"></i> Polygone</a></li>
+                        <li ng-class="{active: createType=='path'}" ng-click="setCreateType('path')"><a href=""><i class="fa fa-star-o"></i> Chemin</a></li>
+                        <li ng-if="isSelected!==false" ng-click="showProperties()"><a href=""><i class="fa fa-cog"></i> Propriétés</a></li>
+                        <li ng-if="isSelected!==false" ng-click="delete()"><a href=""><i class="fa fa-ban"></i> Supprimer</a></li>
+                        <li ng-class="{active: createType=='resize'}" ng-if="showResize!==false" ng-click="setCreateType('resize')"><a href=""><i class="fa fa-arrows"></i> Redimensionner</a></li>
                     </ul>
                     <a class="navbar-brand coord" href="">x : {{planCoord.x}} | y : {{planCoord.y}}</a>
                 </div>
