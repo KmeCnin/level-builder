@@ -243,6 +243,10 @@ levelBuilder.controller('levelController', function ($scope) {
             elem.addClass('selected');
         }
     };
+    // Supprimer élément
+    $scope.delete = function() {
+        $('.selected').remove();
+    };
     // Génération du fichier xml
     $scope.generateXML = function() {
         $scope.xml = '<level name="'+$scope.name+'">';

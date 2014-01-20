@@ -40,6 +40,7 @@
                         <li ng-class="{active: createType=='poly'}" ng-click="setCreateType('poly')"><a href="">Polygone</a></li>
                         <li ng-class="{active: createType=='path'}" ng-click="setCreateType('path')"><a href="">Chemin</a></li>
                         <li ng-if="isSelected!==false" ng-click="showProperties()"><a href="">Propriétés</a></li>
+                        <li ng-if="isSelected!==false" ng-click="delete()"><a href="">Supprimer</a></li>
                     </ul>
                     <a class="navbar-brand coord" href="">x : {{planCoord.x}} | y : {{planCoord.y}}</a>
                 </div>
