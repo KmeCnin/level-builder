@@ -6,27 +6,28 @@
         <script src="http://pierrechanel-gauthier.com/lib/js/angular.min.js"></script>
         <script src="http://pierrechanel-gauthier.com/lib/js/jQuery.js"></script>
         <script src="http://pierrechanel-gauthier.com/lib/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Functions -->
+        <script src="js/functions.js"></script>
         <!-- Controllers -->
         <script src="js/controllers/levelController.js"></script>
         <!-- CSS -->
         <link rel="stylesheet" href="http://pierrechanel-gauthier.com/lib/bootstrap/css/themes/slate.css" type="text/plain">
         <link rel="stylesheet" href="css/styles.css" type="text/plain">
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" href="lib/font-awesome-4.0.3/css/font-awesome.min.css" type="text/plain">
     </head>
-    <body class="container" ng-controller="levelController">
+    <body ng-controller="levelController">
         <div id="file-drop" imagedrop on-image-drop="imageDropped()"></div>
-        <div class="bsa well">
-            <form class="form-inline">
+        <div class="bsa well main">
+            <form class="form-inline formhead" style="margin-bottom:10px;">
                 <!--<label for="name">Nom du niveau : </label>-->
-                <input id="name" type="text" class="form-control" ng-model="name" placeholder="Nom du niveau" style="width:500px;">
+                <input ng-change="generateXML()" id="name" type="text" class="form-control" ng-model="name" placeholder="Nom du niveau" style="width:500px;">
                 <!--<label for="gx" style="margin-left:50px;">Gravité : </label>-->
-                <input id="gx" type="number" class="form-control" ng-model="gx" placeholder="Gravité x" style="width:105px;">
-                <input id="gy" type="number" class="form-control" ng-model="gy" placeholder="Gravité y" style="width:105px;">
+                <input ng-change="generateXML()" id="gx" type="number" class="form-control" ng-model="gx" placeholder="Gravité x" style="width:105px;" value="0">
+                <input ng-change="generateXML()" id="gy" type="number" class="form-control" ng-model="gy" placeholder="Gravité y" style="width:105px;" value="-0.9">
+                <button style="float:right;" type="button" class="btn btn-default" ng-class="{active:showXML}" ng-click="toggleXML()">XML</button>
             </form>
-        </div>
-        <div class="bsa well main" style="margin-right:15px;">
             <!--<canvas id="canvas"></canvas>-->
-            <div class="navbar navbar-default" id="btnwrapper">
+            <div class="navbar navbar-default" id="btnwrapper" ng-class="{hide:showXML}">
                 <div class="navbar-collapse collapse navbar-responsive-collapse" style="padding:0">
                     <ul class="nav navbar-nav">
                         <li ng-class="{active: createType=='select1'||createType=='select2'}" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href=""><i class="fa fa-location-arrow"></i> Sélection <b class="caret"></b></a>
@@ -47,10 +48,10 @@
                     <a class="navbar-brand coord" href="">x : {{planCoord.x}} | y : {{planCoord.y}}</a>
                 </div>
             </div>
-            <div id="whitesheet" ng-right-click="actionEndPath()" ng-left-click="actionBegin()" ng-mouseup="actionEnd()" ng-mousemove="setMouseCoord($event);actionUpdate();">
+            <div ng-class="{hide:showXML}" id="whitesheet" ng-right-click="actionEndPath()" ng-left-click="actionBegin()" ng-mouseup="actionEnd()" ng-mousemove="setMouseCoord($event);actionUpdate();">
                 <svg id="svg" ng-class="{background: createType=='select1'}">
                     <circle class="origin" ng:attr:cx="{{origin.cx}}" ng:attr:cy="{{origin.cy}}" ng:attr:r="{{origin.r}}" />
-                    <g ng-repeat="e in elements">
+                    <g ng-repeat="e in elements" ng-if="e.display">
                         <rect ng:attr:id="{{e.id}}" ng-click="setSelected($event)" ng-if="e.type=='rect'" ng:attr:x="{{e.x}}" ng:attr:y="{{e.y}}" ng:attr:width="{{e.width}}" ng:attr:height="{{e.height}}" ng:attr:style="{{e.style}}" />
                         <circle ng:attr:id="{{e.id}}" ng-click="setSelected($event)" ng-if="e.type=='circle'" ng:attr:cx="{{e.x}}" ng:attr:cy="{{e.y}}" ng:attr:r="{{e.r}}" />
                         <path ng:attr:id="{{e.id}}" class="poly" ng-click="setSelected($event)" ng-if="e.type=='poly'" ng:attr:d="{{e.d}}" />
@@ -59,6 +60,8 @@
                 </svg>
                 <img ng-repeat="t in textures" class="texture" ng-click="setSelected($event)" ng:attr:src="{{t.src}}">
             </div>
+            <textarea ng-class="{hide:!showXML}"  id="xml" ng-model="xml" class="form-control" spellcheck="false">
+            </textarea>
         </div>
         <!-- Modales -->
         <div ng-repeat="e in elements" class="modal fade" ng:attr:id="modalInfo{{e.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -120,9 +123,5 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-        <div class="bsa well main">
-            <textarea id="xml" class="form-control">
-            </textarea>
-        </div>
     </body>
 </html>
