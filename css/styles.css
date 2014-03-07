@@ -62,7 +62,7 @@ div#whitesheet {
     padding-top : 50px;
     position : relative;
     top : -52px;
-    height : 95%;
+    height : 92%;
     z-index : 10;
     background-color: white;
     border-radius : 6px;
@@ -77,6 +77,7 @@ div#btnwrapper {
     border-bottom-left-radius: 0;
     width : 100%;
     margin : 0;
+    margin-top: 72px;
 }
 path {
     fill: none;
@@ -158,5 +159,13 @@ path.poly.selected {
     width : 100px;
 }
 #xml {
-    height : 95%;
+    height : 92%;
+    position: relative;
+    top: 10px;
+}
+form.header table {
+    background-color: transparent;
+}
+form.header input {
+    width : 100px;
 }

@@ -19,6 +19,9 @@ levelBuilder.controller('levelController', function ($scope) {
     $scope.showXML = false;
     $scope.gx = 0;
     $scope.gy = -0.9;
+    $scope.player_angular_damping = 0.0;
+    $scope.player_linear_damping = 0.0;
+    $scope.impulse_strength = 50;
     $scope.toggleXML = function() {
         if($scope.showXML) {
             $scope.loadXML();
@@ -56,8 +59,8 @@ levelBuilder.controller('levelController', function ($scope) {
                     $scope.startMove.x = $scope.mouseCoord.x;
                     $scope.startMove.y = $scope.mouseCoord.y;
                     $scope.drawing = true;
-                    break;
                 }
+                break;
             case 'select2':
                 $scope.startMove.x = $scope.mouseCoord.x;
                 $scope.startMove.y = $scope.mouseCoord.y;
@@ -205,6 +208,7 @@ levelBuilder.controller('levelController', function ($scope) {
             } else if ($scope.createType === 'select1') { // Texture
                 $('.selected').css('left', parseFloat($('.selected').css('left')) + ($scope.mouseCoord.x - $scope.startMove.x));
                 $('.selected').css('top', parseFloat($('.selected').css('top')) + ($scope.mouseCoord.y - $scope.startMove.y));
+                console.log($('.selected').css('left'));
                 $scope.startMove.x = $scope.mouseCoord.x;
                 $scope.startMove.y = $scope.mouseCoord.y;
             } else if($scope.createType === 'select2') { // Element
@@ -301,6 +305,12 @@ levelBuilder.controller('levelController', function ($scope) {
         var $xml = $(xmlDoc);
         $scope.origin.cx = parseFloat($xml.find('origin').attr('x'));
         $scope.origin.cy = parseFloat($xml.find('origin').attr('y'));
+        $scope.gx = parseFloat($xml.find('world').find('gravity').attr('x'));
+        $scope.gy = parseFloat($xml.find('world').find('gravity').attr('y'));
+        $scope.player_angular_damping = parseFloat($xml.find('world').find('player').attr('angular_damping'));
+        $scope.player_linear_damping = parseFloat($xml.find('world').find('player').attr('linear_damping'));
+        $scope.impulse_strength = parseInt($xml.find('world').find('player').attr('impulse_strength'));
+        
         $scope.elements = []; 
         $.each($xml.find('object'), function(id, object) {
             if ($xml.find(object).find('shape').attr('type') === 'box') {
@@ -349,10 +359,10 @@ levelBuilder.controller('levelController', function ($scope) {
                 $xml.find(object).find('shape').find('point').each(function() {
                     if ($(this).attr('id') === '0') {
                         key = 'M';
-                        last = 'Z '+(parseFloat($(this).attr('x'))+ $scope.origin.cx)+','+(parseFloat($(this).attr('y'))+ $scope.origin.cy)+' ';
+                        last = 'Z '+(parseFloat($(this).attr('x'))+ $scope.origin.cx)+','+(-1 * parseFloat($(this).attr('y')) + $scope.origin.cy)+' ';
                     } else
                         key = 'L';
-                    d += key+' '+(parseFloat($(this).attr('x'))+ $scope.origin.cx)+','+(parseFloat($(this).attr('y'))+ $scope.origin.cy)+' ';
+                    d += key+' '+(parseFloat($(this).attr('x'))+ $scope.origin.cx)+','+(-1 * parseFloat($(this).attr('y')) + $scope.origin.cy)+' ';
                 });
                 if ($xml.find(object).find('shape').attr('type') === 'polygon')
                     d += last;
@@ -382,6 +392,7 @@ levelBuilder.controller('levelController', function ($scope) {
             $scope.xml += '\n\t<origin x="'+$scope.origin.cx+'" y="'+$scope.origin.cy+'" />';
             $scope.xml += '\n\t<world>';
                 $scope.xml += '\n\t\t<gravity x="'+$scope.gx+'" y="'+$scope.gy+'" />';
+                $scope.xml += '\n\t\t<player angular_damping="'+$scope.player_angular_damping+'" linear_damping="'+$scope.player_linear_damping+'" impulse_strength="'+$scope.impulse_strength+'" />';
                 $scope.xml += '\n\t\t<worldObjects>';
                 for (var i = 0; i < $scope.elements.length; i++) {
                     var e = $scope.elements[i];
@@ -405,7 +416,7 @@ levelBuilder.controller('levelController', function ($scope) {
                                 for (var j = 0; j < l; j++) {
                                     if (j % 2 !== 0) {
                                         var coord = coords[j].split(',');
-                                        $scope.xml += '\n\t\t\t\t\t<point id="'+((j-1)/2)+'" x="'+(coord[0] - $scope.origin.cx)+'" y="'+(coord[1] - $scope.origin.cy)+'" />';
+                                        $scope.xml += '\n\t\t\t\t\t<point id="'+((j-1)/2)+'" x="'+(coord[0] - $scope.origin.cx)+'" y="'+-(coord[1] - $scope.origin.cy)+'" />';
                                     }
                                 }
                                 $scope.xml += '\n\t\t\t\t</shape>';

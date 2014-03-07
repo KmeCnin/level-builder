@@ -18,13 +18,26 @@
     <body ng-controller="levelController">
         <div id="file-drop" imagedrop on-image-drop="imageDropped()"></div>
         <div class="bsa well main">
-            <form class="form-inline formhead" style="margin-bottom:10px;">
-                <!--<label for="name">Nom du niveau : </label>-->
-                <input ng-change="generateXML()" id="name" type="text" class="form-control" ng-model="name" placeholder="Nom du niveau" style="width:500px;">
-                <!--<label for="gx" style="margin-left:50px;">Gravité : </label>-->
-                <input ng-change="generateXML()" id="gx" type="number" class="form-control" ng-model="gx" placeholder="Gravité x" style="width:105px;" value="0">
-                <input ng-change="generateXML()" id="gy" type="number" class="form-control" ng-model="gy" placeholder="Gravité y" style="width:105px;" value="-0.9">
-                <button style="float:right;" type="button" class="btn btn-default" ng-class="{active:showXML}" ng-click="toggleXML()">XML</button>
+            <form class="form-inline formhead header" style="margin-bottom:10px;">
+                <table style="float:left;">
+                    <tr>
+                        <th><div class="label">Nom du niveau</div></th>
+                        <th><div class="label">Gravité x</div></th>
+                        <th><div class="label">Gravité y</div></th>
+                        <th><div class="label">Angular Damping</div></th>
+                        <th><div class="label">Linear Damping</div></th>
+                        <th><div class="label">Impulsion</div></th>
+                    </tr>
+                    <tr>
+                        <td><input id="name" type="text" class="form-control" ng-model="name" style="width:300px;" /></td>
+                        <td><input id="gx" type="number" class="form-control" ng-model="gx" /></td>
+                        <td><input id="gy" type="number" class="form-control" ng-model="gy" /></td>
+                        <td><input id="player_angular_damping" type="number" class="form-control" ng-model="player_angular_damping" /></td>
+                        <td><input id="player_linear_damping" type="number" class="form-control" ng-model="player_linear_damping" /></td>
+                        <td><input id="impulse_strength" type="number" class="form-control" ng-model="impulse_strength" /></td>
+                    </tr>
+                </table>
+                <button style="float:right;margin-top:22px;" type="button" class="btn btn-default" ng-class="{active:showXML}" ng-click="toggleXML()">XML</button>
             </form>
             <!--<canvas id="canvas"></canvas>-->
             <div class="navbar navbar-default" id="btnwrapper" ng-class="{hide:showXML}">
