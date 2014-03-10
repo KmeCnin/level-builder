@@ -169,3 +169,6 @@ form.header table {
 form.header input {
     width : 100px;
 }
+.nav > li > a {
+    padding: 15px 12px;
+}

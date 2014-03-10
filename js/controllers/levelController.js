@@ -9,6 +9,7 @@ levelBuilder.controller('levelController', function ($scope) {
     $scope.createType = null;
     $scope.elements = [];
     $scope.textures = [];
+    $scope.joints = [];
     $scope.drawing = false;
     $scope.begin = null;
     $scope.uploadedFile = null;
@@ -34,6 +35,7 @@ levelBuilder.controller('levelController', function ($scope) {
     $scope.setCreateType = function(type) {
         $scope.createType = type;
         $scope.drawing = false;
+        $scope.joints = [];
         if (type !== 'resize') {
             $('.selected.texture').attr('class', 'texture');
             $('#svg .selected.poly').attr('class', 'poly');
@@ -272,6 +274,7 @@ levelBuilder.controller('levelController', function ($scope) {
     //Sélectionne un élément
     $scope.setSelected = function(e){
         var elem = angular.element(e.srcElement);
+        // Sélections
         if ($scope.createType === 'select1') {
             $('.selected.texture').attr('class', 'texture');
             elem.addClass('selected');
@@ -290,6 +293,24 @@ levelBuilder.controller('levelController', function ($scope) {
                 $scope.showResize = $('.selected').attr('id');
             else
                 $scope.showResize = false;
+        }
+        // Jointures
+        if ($scope.createType === 'joint1') {
+            $('.selected.texture').attr('class', 'texture');
+            $('#svg .selected.poly').attr('class', 'poly');
+            if ($scope.joints.length === 0) {           // Premier élément
+                $('#svg .selected').attr('class', '');
+                elem.addClass('selected');
+                $scope.joints.push(parseInt(elem.attr('id')));
+            } else if ($scope.joints.length === 1) {    // Deuxième élément
+                elem.addClass('selected');
+                $scope.joints.push(parseInt(elem.attr('id')));
+            } else if ($scope.joints.length === 2) {    // Premier point de jointure
+                $scope.joints.push($scope.planCoord);
+            } else {
+                alert('Une jointure ne peut affecter que deux éléments à la fois.');
+            }
+            console.log($scope.joints);
         }
     };
     // Supprimer élément
