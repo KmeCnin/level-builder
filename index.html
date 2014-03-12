@@ -27,6 +27,7 @@
                         <th><div class="label">Angular Damping</div></th>
                         <th><div class="label">Linear Damping</div></th>
                         <th><div class="label">Impulsion</div></th>
+                        <th><div class="label">Restitution</div></th>
                     </tr>
                     <tr>
                         <td><input id="name" type="text" class="form-control" ng-model="name" style="width:300px;" /></td>
@@ -35,6 +36,7 @@
                         <td><input id="player_angular_damping" type="number" class="form-control" ng-model="player_angular_damping" /></td>
                         <td><input id="player_linear_damping" type="number" class="form-control" ng-model="player_linear_damping" /></td>
                         <td><input id="impulse_strength" type="number" class="form-control" ng-model="impulse_strength" /></td>
+                        <td><input id="restitution" type="number" class="form-control" ng-model="restitution" /></td>
                     </tr>
                 </table>
                 <button style="float:right;margin-top:22px;" type="button" class="btn btn-default" ng-class="{active:showXML}" ng-click="toggleXML()">XML</button>
@@ -60,7 +62,7 @@
                                 <li ng-class="{active: createType=='joint2'}" ng-click="setCreateType('joint2')"><a href=""><i class="fa fa-arrows-h"></i> Jointure distante</a></li>
                             </ul>
                         </li>
-                        <li ng-if="isSelected!==false" ng-click="showProperties()"><a href=""><i class="fa fa-cog"></i> Propriétés</a></li>
+                        <li ng-if="isSelected!==false && showProp!==false" ng-click="showProperties()"><a href=""><i class="fa fa-cog"></i> Propriétés</a></li>
                         <li ng-if="isSelected!==false" ng-click="delete()"><a href=""><i class="fa fa-ban"></i> Supprimer</a></li>
                         <li ng-class="{active: createType=='resize'}" ng-if="showResize!==false" ng-click="setCreateType('resize')"><a href=""><i class="fa fa-arrows"></i> Redimensionner</a></li>
                     </ul>
@@ -75,6 +77,7 @@
                         <circle ng:attr:id="{{e.id}}" ng-click="setSelected($event)" ng-if="e.type=='circle'" ng:attr:cx="{{e.x}}" ng:attr:cy="{{e.y}}" ng:attr:r="{{e.r}}" />
                         <path ng:attr:id="{{e.id}}" class="poly" ng-click="setSelected($event)" ng-if="e.type=='poly'" ng:attr:d="{{e.d}}" />
                         <path ng:attr:id="{{e.id}}" ng-click="setSelected($event)" ng-if="e.type=='path'" ng:attr:d="{{e.d}}" />
+                        <circle ng:attr:id="{{e.id}}" ng-click="setSelected($event)" ng-if="e.type=='joint1'" ng:attr:cx="{{e.x}}" ng:attr:cy="{{e.y}}" ng:attr:data-type="{{e.type}}" r="5" />
                     </g>
                 </svg>
                 <img ng-repeat="t in textures" class="texture" ng-click="setSelected($event)" ng:attr:src="{{t.src}}">

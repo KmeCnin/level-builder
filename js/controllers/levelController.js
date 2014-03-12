@@ -17,12 +17,14 @@ levelBuilder.controller('levelController', function ($scope) {
     $scope.offset = {'x': 0, 'y': 0};
     $scope.isSelected = false;
     $scope.showResize = false;
+    $scope.showProp = true;
     $scope.showXML = false;
     $scope.gx = 0;
     $scope.gy = -0.9;
     $scope.player_angular_damping = 0.0;
     $scope.player_linear_damping = 0.0;
     $scope.impulse_strength = 50;
+    $scope.restitution = 0.4;
     $scope.toggleXML = function() {
         if($scope.showXML) {
             $scope.loadXML();
@@ -42,6 +44,7 @@ levelBuilder.controller('levelController', function ($scope) {
             $('#svg .selected').attr('class', '');
             $scope.isSelected = false;
             $scope.showResize = false;
+            $scope.showProp = false;
         }
     };
     $scope.showProperties = function() {
@@ -281,7 +284,8 @@ levelBuilder.controller('levelController', function ($scope) {
             $('#svg .selected.poly').attr('class', 'poly');
             $('#svg .selected').attr('class', '');
             $scope.isSelected = true;
-            $scope.showResize = true;
+	    $scope.showResize = true;
+	    $scope.showProp = true;
         }
         if ($scope.createType === 'select2') {
             $('.selected.texture').attr('class', 'texture');
@@ -289,10 +293,20 @@ levelBuilder.controller('levelController', function ($scope) {
             $('#svg .selected').attr('class', '');
             elem.addClass('selected');
             $scope.isSelected = $('.selected').attr('id');
-            if ($scope.elements[$('.selected').attr('id')].type !== 'poly' && $scope.elements[$('.selected').attr('id')].type !== 'path')
+	    var e = $scope.elements[$('.selected').attr('id')];
+	    if (e.type === 'joint1') {
+		$('#svg [id='+e.element1+']').attr('class', 'selected');
+		$('#svg [id='+e.element2+']').attr('class', 'selected');
+		$scope.showResize = false;
+		$scope.showProp = false;
+	    }
+            else if (e.type !== 'poly' && e.type !== 'path') {
                 $scope.showResize = $('.selected').attr('id');
-            else
+                $scope.showProp = $('.selected').attr('id');
+	    } else {
                 $scope.showResize = false;
+                $scope.showProp = false;
+	    }
         }
         // Jointures
         if ($scope.createType === 'joint1') {
@@ -305,19 +319,33 @@ levelBuilder.controller('levelController', function ($scope) {
             } else if ($scope.joints.length === 1) {    // Deuxième élément
                 elem.addClass('selected');
                 $scope.joints.push(parseInt(elem.attr('id')));
-            } else if ($scope.joints.length === 2) {    // Premier point de jointure
+            } else if ($scope.joints.length === 2) {    // Point de jointure
                 $scope.joints.push($scope.planCoord);
+		var element = {
+                    'id': $scope.elements.length,
+                    'type': 'joint1',
+                    'x': $scope.mouseCoord.x,
+                    'y': $scope.mouseCoord.y,
+		    'element1': $scope.joints[0],
+		    'element2': $scope.joints[1],
+		    'display' : true
+                };
+		$scope.elements.push(element);
+                $('#svg .selected').attr('class', '');
+		$scope.joints = [];
             } else {
                 alert('Une jointure ne peut affecter que deux éléments à la fois.');
             }
-            console.log($scope.joints);
         }
     };
     // Supprimer élément
     $scope.delete = function() {
         if ($('.selected').is('img'))
             $('.selected').remove();
-        else
+        else if ($('.selected').is('[data-type=joint1]')) {
+	    $scope.elements[$('.selected[data-type=joint1]').attr('id')].display = false;
+	    $('#svg .selected').attr('class', '');
+	} else
             $scope.elements[$('.selected').attr('id')].display = false;
     };
     // Affichage à partir d'un fichier xml
@@ -331,6 +359,7 @@ levelBuilder.controller('levelController', function ($scope) {
         $scope.player_angular_damping = parseFloat($xml.find('world').find('player').attr('angular_damping'));
         $scope.player_linear_damping = parseFloat($xml.find('world').find('player').attr('linear_damping'));
         $scope.impulse_strength = parseInt($xml.find('world').find('player').attr('impulse_strength'));
+	$scope.restitution = parseFloat($xml.find('world').find('player').attr('restitution'));
         
         $scope.elements = []; 
         $.each($xml.find('object'), function(id, object) {
@@ -413,18 +442,18 @@ levelBuilder.controller('levelController', function ($scope) {
             $scope.xml += '\n\t<origin x="'+$scope.origin.cx+'" y="'+$scope.origin.cy+'" />';
             $scope.xml += '\n\t<world>';
                 $scope.xml += '\n\t\t<gravity x="'+$scope.gx+'" y="'+$scope.gy+'" />';
-                $scope.xml += '\n\t\t<player angular_damping="'+$scope.player_angular_damping+'" linear_damping="'+$scope.player_linear_damping+'" impulse_strength="'+$scope.impulse_strength+'" />';
+                $scope.xml += '\n\t\t<player angular_damping="'+$scope.player_angular_damping+'" linear_damping="'+$scope.player_linear_damping+'" impulse_strength="'+$scope.impulse_strength+'" restitution="'+$scope.restitution+'" />';
                 $scope.xml += '\n\t\t<worldObjects>';
                 for (var i = 0; i < $scope.elements.length; i++) {
                     var e = $scope.elements[i];
-                    if (e.display) {
+                    if (e.display && e.type !== 'joint1') {
                         $scope.xml += '\n\t\t\t<object name="'+e.name+'">';
                             if (e.shape === 'box') { // Rectangle
                                 $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+((e.x - $scope.origin.cx)+e.width/2)+'" y="'+(-(e.y - $scope.origin.cy)-e.height/2)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
                                 $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'" width="'+e.width/2+'" height="'+e.height/2+'" />';
                             } else if (e.shape === 'circle') { // Cercle
-                                $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+(e.x - $scope.origin.cx)+'" y="'+-(e.y - $scope.origin.cy)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
-                                $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'" radius="'+e.r+'" />';
+				    $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+(e.x - $scope.origin.cx)+'" y="'+-(e.y - $scope.origin.cy)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
+				    $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'" radius="'+e.r+'" />';
                             } else if (e.shape === 'polygon' || e.shape === 'chain') { // Polygone ou chemin
                                 $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
                                 $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'">';
