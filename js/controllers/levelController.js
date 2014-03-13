@@ -94,7 +94,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     'body_angular_damping' : '0.0',
                     'body_linear_damping' : '0.0',
                     'fixture_density' : '0.9',
-                    'fixture_restitution' : '0.0'
+                    'fixture_restitution' : '0.0',
+		    'end_x' : null,
+		    'end_y' : null
                 };
                 $scope.elements.push(element);
                 $scope.drawing = true;
@@ -115,7 +117,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     'body_angular_damping' : '0.0',
                     'body_linear_damping' : '0.0',
                     'fixture_density' : '0.9',
-                    'fixture_restitution' : '0.0'
+                    'fixture_restitution' : '0.0',
+		    'end_x' : null,
+		    'end_y' : null
                 };
                 $scope.elements.push(element);
                 $scope.drawing = true;
@@ -136,7 +140,9 @@ levelBuilder.controller('levelController', function ($scope) {
                         'body_angular_damping' : '0.0',
                         'body_linear_damping' : '0.0',
                         'fixture_density' : '0.9',
-                        'fixture_restitution' : '0.0'
+                        'fixture_restitution' : '0.0',
+                        'end_x' : null,
+                        'end_y' : null
                     };
                     $scope.elements.push(element);
                     $scope.drawing = true;
@@ -162,7 +168,9 @@ levelBuilder.controller('levelController', function ($scope) {
                         'body_angular_damping' : '0.0',
                         'body_linear_damping' : '0.0',
                         'fixture_density' : '0.9',
-                        'fixture_restitution' : '0.0'
+                        'fixture_restitution' : '0.0',
+                        'end_x' : null,
+                        'end_y' : null
                     };
                     $scope.elements.push(element);
                     $scope.drawing = true;
@@ -305,7 +313,7 @@ levelBuilder.controller('levelController', function ($scope) {
                 $scope.showProp = $('.selected').attr('id');
 	    } else {
                 $scope.showResize = false;
-                $scope.showProp = false;
+                $scope.showProp = $('.selected').attr('id');
 	    }
         }
         // Jointures
@@ -381,7 +389,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     'body_angular_damping' : parseFloat($xml.find(object).find('body').attr('angular_damping')),
                     'body_linear_damping' : parseFloat($xml.find(object).find('body').attr('linear_damping')),
                     'fixture_density' : parseFloat($xml.find(object).find('fixture').attr('density')),
-                    'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution'))
+                    'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution')),
+		    'end_x' : parseFloat($xml.find(object).find('body').attr('end_x')),
+		    'end_y' : parseFloat($xml.find(object).find('body').attr('end_y'))
                 };
             } else if ($xml.find(object).find('shape').attr('type') === 'circle') {
                 var element = {
@@ -400,7 +410,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     'body_angular_damping' : parseFloat($xml.find(object).find('body').attr('angular_damping')),
                     'body_linear_damping' : parseFloat($xml.find(object).find('body').attr('linear_damping')),
                     'fixture_density' : parseFloat($xml.find(object).find('fixture').attr('density')),
-                    'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution'))
+                    'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution')),
+		    'end_x' : parseFloat($xml.find(object).find('body').attr('end_x')),
+		    'end_y' : parseFloat($xml.find(object).find('body').attr('end_y'))
                 };
             } else if ($xml.find(object).find('shape').attr('type') === 'polygon' || $xml.find(object).find('shape').attr('type') === 'chain') {
                 var d = '';
@@ -430,7 +442,9 @@ levelBuilder.controller('levelController', function ($scope) {
                     'body_angular_damping' : parseFloat($xml.find(object).find('body').attr('angular_damping')),
                     'body_linear_damping' : parseFloat($xml.find(object).find('body').attr('linear_damping')),
                     'fixture_density' : parseFloat($xml.find(object).find('fixture').attr('density')),
-                    'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution'))
+                    'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution')),
+		    'end_x' : parseFloat($xml.find(object).find('body').attr('end_x')),
+		    'end_y' : parseFloat($xml.find(object).find('body').attr('end_y'))
                 };
             }
             $scope.elements.push(element);
@@ -449,7 +463,7 @@ levelBuilder.controller('levelController', function ($scope) {
                     if (e.display && e.type !== 'joint1') {
                         $scope.xml += '\n\t\t\t<object name="'+e.name+'">';
                             if (e.shape === 'box') { // Rectangle
-                                $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+((e.x - $scope.origin.cx)+e.width/2)+'" y="'+(-(e.y - $scope.origin.cy)-e.height/2)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
+                                $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+((e.x - $scope.origin.cx)+e.width/2)+'" y="'+(-(e.y - $scope.origin.cy)-e.height/2)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" end_x="'+e.end_x+'" end_y="'+e.end_y+'" />';
                                 $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'" width="'+e.width/2+'" height="'+e.height/2+'" />';
                             } else if (e.shape === 'circle') { // Cercle
 				    $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+(e.x - $scope.origin.cx)+'" y="'+-(e.y - $scope.origin.cy)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
