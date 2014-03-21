@@ -461,7 +461,7 @@ levelBuilder.controller('levelController', function ($scope) {
                 for (var i = 0; i < $scope.elements.length; i++) {
                     var e = $scope.elements[i];
                     if (e.display && e.type !== 'joint1') {
-                        $scope.xml += '\n\t\t\t<object name="'+e.name+'">';
+                        $scope.xml += '\n\t\t\t<object id="'+e.id+'" name="'+e.name+'">';
                             if (e.shape === 'box') { // Rectangle
                                 $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+((e.x - $scope.origin.cx)+e.width/2)+'" y="'+(-(e.y - $scope.origin.cy)-e.height/2)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" end_x="'+e.end_x+'" end_y="'+e.end_y+'" />';
                                 $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'" width="'+e.width/2+'" height="'+e.height/2+'" />';
@@ -487,7 +487,12 @@ levelBuilder.controller('levelController', function ($scope) {
                             }
                             $scope.xml += '\n\t\t\t\t<fixture density="'+e.fixture_density+'" restitution="'+e.fixture_restitution+'" />';
                         $scope.xml += '\n\t\t\t</object>';
-                    }
+                    } else if (e.display && e.type === 'joint1') {
+			$scope.xml += '\n\t\t\t<joint id="'+e.id+'" type="revolute">';
+			$scope.xml += '\n\t\t\t\t<element id="'+e.element1+'" local_anchor_x="'+((e.x - $scope.origin.cx) - $scope.elements[e.element1].x)+'" local_anchor_y="'+((e.y - $scope.origin.cy) - $scope.elements[e.element1].y)+'" />';
+			$scope.xml += '\n\t\t\t\t<element id="'+e.element2+'" local_anchor_x="'+((e.x - $scope.origin.cx) - $scope.elements[e.element2].x)+'" local_anchor_y="'+((e.y - $scope.origin.cy) - $scope.elements[e.element2].y)+'" />';
+			$scope.xml += '\n\t\t\t</joint>';
+		    }
                 }
                 $scope.xml += '\n\t\t</worldObjects>';
             $scope.xml += '\n\t</world>';
