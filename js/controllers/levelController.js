@@ -449,6 +449,20 @@ levelBuilder.controller('levelController', function ($scope) {
             }
             $scope.elements.push(element);
         });
+	$.each($xml.find('joint'), function(id, object) {
+	    if ($xml.find(object).attr('type') === 'revolute') {
+		var element = {
+                    'id': id,
+                    'type': 'joint1',
+                    'x': parseFloat($xml.find(object).find('element1').attr('local_anchor_x'))*2 + $scope.origin.cx + $scope.elements[$xml.find(object).find('element1').attr('id')].x,
+                    'y': -1 * parseFloat($xml.find(object).find('element1').attr('local_anchor_y'))*2 + $scope.origin.cy + $scope.elements[$xml.find(object).find('element1').attr('id')].y,
+		    'element1': parseInt($xml.find(object).find('element1').attr('id')),
+		    'element2': parseInt($xml.find(object).find('element2').attr('id')),
+                    'display' : true
+                };
+	    }
+            $scope.elements.push(element);
+	});
     };
     // Génération du fichier xml
     $scope.generateXML = function() {
@@ -489,8 +503,8 @@ levelBuilder.controller('levelController', function ($scope) {
                         $scope.xml += '\n\t\t\t</object>';
                     } else if (e.display && e.type === 'joint1') {
 			$scope.xml += '\n\t\t\t<joint id="'+e.id+'" type="revolute">';
-			$scope.xml += '\n\t\t\t\t<element id="'+e.element1+'" local_anchor_x="'+((e.x - $scope.origin.cx) - $scope.elements[e.element1].x)+'" local_anchor_y="'+((e.y - $scope.origin.cy) - $scope.elements[e.element1].y)+'" />';
-			$scope.xml += '\n\t\t\t\t<element id="'+e.element2+'" local_anchor_x="'+((e.x - $scope.origin.cx) - $scope.elements[e.element2].x)+'" local_anchor_y="'+((e.y - $scope.origin.cy) - $scope.elements[e.element2].y)+'" />';
+			$scope.xml += '\n\t\t\t\t<element1 id="'+e.element1+'" local_anchor_x="'+((e.x - $scope.origin.cx) - $scope.elements[e.element1].x)/2+'" local_anchor_y="'+(-((e.y - $scope.origin.cy) - $scope.elements[e.element1].y))/2+'" />';
+			$scope.xml += '\n\t\t\t\t<element2 id="'+e.element2+'" local_anchor_x="'+((e.x - $scope.origin.cx) - $scope.elements[e.element2].x)/2+'" local_anchor_y="'+(-((e.y - $scope.origin.cy) - $scope.elements[e.element2].y))/2+'" />';
 			$scope.xml += '\n\t\t\t</joint>';
 		    }
                 }
