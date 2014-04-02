@@ -5,6 +5,7 @@ levelBuilder.controller('levelController', function ($scope) {
     $scope.mouseCoord = {'x': 0, 'y' : 0};
     $scope.planCoord = {'x': 0, 'y' : 0};
     $scope.origin = {'cx': 0, 'cy': 0, 'r': 5};
+    $scope.title = {'name': '', 'tag': ''};
     $scope.startMove = {'x': 0, 'y': 0};
     $scope.createType = null;
     $scope.elements = [];
@@ -514,6 +515,13 @@ levelBuilder.controller('levelController', function ($scope) {
                 $scope.xml += '\n\t\t<layer image="imagename.png" x="0" y="0" z="0" />';
             $scope.xml += '\n\t</background>';
         $scope.xml += '\n</level>';
+    };
+    // Infos bulle pour svg
+    $scope.setTitle = function(id) {
+	$scope.title = {
+	    'name' : $scope.elements[id].name,
+	    'tag' : $scope.elements[id].body_tag
+	};
     };
 });
 // Gestion du click gauche
