@@ -90,14 +90,19 @@ levelBuilder.controller('levelController', function ($scope) {
                     'angle' : '0',
                     'display' : true,
                     'body_type' : 'static',
+//                    'movespeed' : '6',
+//		    'body_dangerous': '',
+//		    'body_contactDynamic': '',
+//		    'body_disappear': '', 
+//		    'body_impulse': '', 
                     'body_tag' : '',
                     'body_bullet' : false,
                     'body_angular_damping' : '0.0',
                     'body_linear_damping' : '0.0',
                     'fixture_density' : '0.9',
-                    'fixture_restitution' : '0.0',
-		    'end_x' : null,
-		    'end_y' : null
+                    'fixture_restitution' : '0.4',
+		    'endx' : null,
+		    'endy' : null
                 };
                 $scope.elements.push(element);
                 $scope.drawing = true;
@@ -113,14 +118,19 @@ levelBuilder.controller('levelController', function ($scope) {
                     'angle' : '0',
                     'display' : true,
                     'body_type' : 'static',
+//                    'movespeed' : '6',
+//		    'body_dangerous': '',
+//		    'body_contactDynamic': '',
+//		    'body_disappear': '', 
+//		    'body_impulse': '', 
                     'body_tag' : '',
                     'body_bullet' : false,
                     'body_angular_damping' : '0.0',
                     'body_linear_damping' : '0.0',
                     'fixture_density' : '0.9',
-                    'fixture_restitution' : '0.0',
-		    'end_x' : null,
-		    'end_y' : null
+                    'fixture_restitution' : '0.4',
+		    'endx' : null,
+		    'endy' : null
                 };
                 $scope.elements.push(element);
                 $scope.drawing = true;
@@ -136,14 +146,19 @@ levelBuilder.controller('levelController', function ($scope) {
                         'angle' : '0',
                         'display' : true,
                         'body_type' : 'static',
+//			'movespeed' : '6',
+//			'body_dangerous': '',
+//			'body_contactDynamic': '',
+//			'body_disappear': '', 
+//			'body_impulse': '', 
                         'body_tag' : '',
                         'body_bullet' : false,
                         'body_angular_damping' : '0.0',
                         'body_linear_damping' : '0.0',
                         'fixture_density' : '0.9',
-                        'fixture_restitution' : '0.0',
-                        'end_x' : null,
-                        'end_y' : null
+			'fixture_restitution' : '0.4',
+                        'endx' : null,
+                        'endy' : null
                     };
                     $scope.elements.push(element);
                     $scope.drawing = true;
@@ -164,14 +179,19 @@ levelBuilder.controller('levelController', function ($scope) {
                         'angle' : '0',
                         'display' : true,
                         'body_type' : 'static',
+//			'movespeed' : '6',
+//			'body_dangerous': '',
+//			'body_contactDynamic': '',
+//			'body_disappear': '', 
+//			'body_impulse': '', 
                         'body_tag' : '',
                         'body_bullet' : false,
                         'body_angular_damping' : '0.0',
                         'body_linear_damping' : '0.0',
                         'fixture_density' : '0.9',
-                        'fixture_restitution' : '0.0',
-                        'end_x' : null,
-                        'end_y' : null
+			'fixture_restitution' : '0.4',
+                        'endx' : null,
+                        'endy' : null
                     };
                     $scope.elements.push(element);
                     $scope.drawing = true;
@@ -385,14 +405,19 @@ levelBuilder.controller('levelController', function ($scope) {
                     'angle' : parseFloat($xml.find(object).find('body').attr('angle')),
                     'display' : true,
                     'body_type' : $xml.find(object).find('body').attr('type'),
+//                    'movespeed' : $xml.find(object).find('body').attr('movespeed'),
+//		    'body_dangerous': $xml.find(object).find('body').attr('dangerous'),
+//		    'body_contactDynamic': $xml.find(object).find('body').attr('contactDynamic'),
+//		    'body_disappear': $xml.find(object).find('body').attr('disappear'), 
+//		    'body_impulse': $xml.find(object).find('body').attr('impulse'), 
                     'body_tag' : $xml.find(object).find('body').attr('tag'),
                     'body_bullet' : $xml.find(object).find('body').attr('bullet'),
                     'body_angular_damping' : parseFloat($xml.find(object).find('body').attr('angular_damping')),
                     'body_linear_damping' : parseFloat($xml.find(object).find('body').attr('linear_damping')),
                     'fixture_density' : parseFloat($xml.find(object).find('fixture').attr('density')),
                     'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution')),
-		    'end_x' : parseFloat($xml.find(object).find('body').attr('end_x')),
-		    'end_y' : parseFloat($xml.find(object).find('body').attr('end_y'))
+		    'endx' : parseFloat($xml.find(object).find('body').attr('endx')),
+		    'endy' : parseFloat($xml.find(object).find('body').attr('endy'))
                 };
             } else if ($xml.find(object).find('shape').attr('type') === 'circle') {
                 var element = {
@@ -406,14 +431,18 @@ levelBuilder.controller('levelController', function ($scope) {
                     'angle' : parseFloat($xml.find(object).find('body').attr('angle')),
                     'display' : true,
                     'body_type' : $xml.find(object).find('body').attr('type'),
+//		    'body_dangerous': $xml.find(object).find('body').attr('dangerous'),
+//		    'body_contactDynamic': $xml.find(object).find('body').attr('contactDynamic'),
+//		    'body_disappear': $xml.find(object).find('body').attr('disappear'), 
+//		    'body_impulse': $xml.find(object).find('body').attr('impulse'), 
                     'body_tag' : $xml.find(object).find('body').attr('tag'),
                     'body_bullet' : $xml.find(object).find('body').attr('bullet'),
                     'body_angular_damping' : parseFloat($xml.find(object).find('body').attr('angular_damping')),
                     'body_linear_damping' : parseFloat($xml.find(object).find('body').attr('linear_damping')),
                     'fixture_density' : parseFloat($xml.find(object).find('fixture').attr('density')),
                     'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution')),
-		    'end_x' : parseFloat($xml.find(object).find('body').attr('end_x')),
-		    'end_y' : parseFloat($xml.find(object).find('body').attr('end_y'))
+		    'endx' : parseFloat($xml.find(object).find('body').attr('endx')),
+		    'endy' : parseFloat($xml.find(object).find('body').attr('endy'))
                 };
             } else if ($xml.find(object).find('shape').attr('type') === 'polygon' || $xml.find(object).find('shape').attr('type') === 'chain') {
                 var d = '';
@@ -438,14 +467,18 @@ levelBuilder.controller('levelController', function ($scope) {
                     'angle' : parseFloat($xml.find(object).find('body').attr('angle')),
                     'display' : true,
                     'body_type' : $xml.find(object).find('body').attr('type'),
+//		    'body_dangerous': $xml.find(object).find('body').attr('dangerous'),
+//		    'body_contactDynamic': $xml.find(object).find('body').attr('contactDynamic'),
+//		    'body_disappear': $xml.find(object).find('body').attr('disappear'), 
+//		    'body_impulse': $xml.find(object).find('body').attr('impulse'), 
                     'body_tag' : $xml.find(object).find('body').attr('tag'),
                     'body_bullet' : $xml.find(object).find('body').attr('bullet'),
                     'body_angular_damping' : parseFloat($xml.find(object).find('body').attr('angular_damping')),
                     'body_linear_damping' : parseFloat($xml.find(object).find('body').attr('linear_damping')),
                     'fixture_density' : parseFloat($xml.find(object).find('fixture').attr('density')),
                     'fixture_restitution' : parseFloat($xml.find(object).find('fixture').attr('restitution')),
-		    'end_x' : parseFloat($xml.find(object).find('body').attr('end_x')),
-		    'end_y' : parseFloat($xml.find(object).find('body').attr('end_y'))
+		    'endx' : parseFloat($xml.find(object).find('body').attr('endx')),
+		    'endy' : parseFloat($xml.find(object).find('body').attr('endy'))
                 };
             }
             $scope.elements.push(element);
@@ -455,8 +488,8 @@ levelBuilder.controller('levelController', function ($scope) {
 		var element = {
                     'id': id,
                     'type': 'joint1',
-                    'x': parseFloat($xml.find(object).find('element1').attr('local_anchor_x'))*2 + $scope.origin.cx + $scope.elements[$xml.find(object).find('element1').attr('id')].x,
-                    'y': -1 * parseFloat($xml.find(object).find('element1').attr('local_anchor_y'))*2 + $scope.origin.cy + $scope.elements[$xml.find(object).find('element1').attr('id')].y,
+                    'x': parseFloat($xml.find(object).find('element1').attr('local_anchor_x'))*2 + $scope.elements[$xml.find(object).find('element1').attr('id')].x + $scope.elements[$xml.find(object).find('element1').attr('id')].width/2,
+                    'y': -1 * parseFloat($xml.find(object).find('element1').attr('local_anchor_y'))*2 + $scope.elements[$xml.find(object).find('element1').attr('id')].y + $scope.elements[$xml.find(object).find('element1').attr('id')].height/2,
 		    'element1': parseInt($xml.find(object).find('element1').attr('id')),
 		    'element2': parseInt($xml.find(object).find('element2').attr('id')),
                     'display' : true
@@ -478,13 +511,13 @@ levelBuilder.controller('levelController', function ($scope) {
                     if (e.display && e.type !== 'joint1') {
                         $scope.xml += '\n\t\t\t<object id="'+e.id+'" name="'+e.name+'">';
                             if (e.shape === 'box') { // Rectangle
-                                $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+((e.x - $scope.origin.cx)+e.width/2)+'" y="'+(-(e.y - $scope.origin.cy)-e.height/2)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" end_x="'+e.end_x+'" end_y="'+e.end_y+'" />';
+                                $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+((e.x - $scope.origin.cx)+e.width/2)+'" y="'+(-(e.y - $scope.origin.cy)-e.height/2)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" endx="'+e.endx+'" endy="'+e.endy+'" />';
                                 $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'" width="'+e.width/2+'" height="'+e.height/2+'" />';
                             } else if (e.shape === 'circle') { // Cercle
-				    $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+(e.x - $scope.origin.cx)+'" y="'+-(e.y - $scope.origin.cy)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
+				    $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" x="'+(e.x - $scope.origin.cx)+'" y="'+-(e.y - $scope.origin.cy)+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" endx="'+e.endx+'" endy="'+e.endy+'"  />';
 				    $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'" radius="'+e.r+'" />';
                             } else if (e.shape === 'polygon' || e.shape === 'chain') { // Polygone ou chemin
-                                $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" />';
+                                $scope.xml += '\n\t\t\t\t<body type="'+e.body_type+'" tag="'+e.body_tag+'" bullet="'+e.body_bullet+'" angle="'+e.angle+'" angular_damping="'+e.body_angular_damping+'" linear_damping="'+e.body_linear_damping+'" endx="'+e.endx+'" endy="'+e.endy+'"  />';
                                 $scope.xml += '\n\t\t\t\t<shape type="'+e.shape+'">';
                                 var coords = e.d.split(' ');
                                 var l = null;
@@ -504,8 +537,8 @@ levelBuilder.controller('levelController', function ($scope) {
                         $scope.xml += '\n\t\t\t</object>';
                     } else if (e.display && e.type === 'joint1') {
 			$scope.xml += '\n\t\t\t<joint id="'+e.id+'" type="revolute">';
-			$scope.xml += '\n\t\t\t\t<element1 id="'+e.element1+'" local_anchor_x="'+((e.x - $scope.origin.cx) - $scope.elements[e.element1].x)/2+'" local_anchor_y="'+(-((e.y - $scope.origin.cy) - $scope.elements[e.element1].y))/2+'" />';
-			$scope.xml += '\n\t\t\t\t<element2 id="'+e.element2+'" local_anchor_x="'+((e.x - $scope.origin.cx) - $scope.elements[e.element2].x)/2+'" local_anchor_y="'+(-((e.y - $scope.origin.cy) - $scope.elements[e.element2].y))/2+'" />';
+			$scope.xml += '\n\t\t\t\t<element1 id="'+e.element1+'" local_anchor_x="'+((e.x - $scope.elements[e.element1].x) - $scope.elements[e.element1].width/2)/2+'" local_anchor_y="'+((-(e.y - $scope.elements[e.element1].y)) + $scope.elements[e.element1].height/2)/2+'" />';
+			$scope.xml += '\n\t\t\t\t<element2 id="'+e.element2+'" local_anchor_x="'+((e.x - $scope.elements[e.element2].x) - $scope.elements[e.element2].width/2)/2+'" local_anchor_y="'+((-(e.y - $scope.elements[e.element2].y)) + $scope.elements[e.element2].height/2)/2+'" />';
 			$scope.xml += '\n\t\t\t</joint>';
 		    }
                 }
